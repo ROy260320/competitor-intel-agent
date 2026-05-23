@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">竞品情报分析助手</string>
+    <string name="title_activity_main">竞品情报分析助手</string>
+    <string name="package_name">com.competitor.intelagent</string>
+    <string name="custom_url_scheme">com.competitor.intelagent</string>
+</resources>
