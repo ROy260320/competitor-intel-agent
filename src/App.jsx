@@ -4,6 +4,10 @@ import ThoughtLog from './components/ThoughtLog';
 import SourceSelector from './components/SourceSelector';
 import ReportDashboard from './components/ReportDashboard';
 import SettingsModal from './components/SettingsModal';
+import BenchmarkMerger from './components/BenchmarkMerger';
+import PiiMasking from './components/PiiMasking';
+import LarkBotSim from './components/LarkBotSim';
+import CreditsWallet from './components/CreditsWallet';
 import { searchCompetitorData } from './services/searchService';
 import { synthesizeReport } from './services/agentService';
 import { Settings, Cpu, HelpCircle, Sparkles } from 'lucide-react';
@@ -37,6 +41,22 @@ export default function App() {
   // UI control
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
+  // Airstack Enterprise Sandbox States
+  const [activeTab, setActiveTab] = useState('radar');
+  const [credits, setCredits] = useState(980000); // 980,000 pts
+  const [billingLogs, setBillingLogs] = useState([
+    { date: '2026-05-23 14:12', action: '系统初始可用额度赠送', tokens: 0, credits: -1000000 },
+    { date: '2026-05-23 15:20', action: '调试: 并行抓取 Notion 资料', tokens: 12400, credits: 12.4 },
+    { date: '2026-05-23 15:22', action: '调试: SWOT 智能提炼生成', tokens: 7600, credits: 7.6 }
+  ]);
+  const [roadmapText, setRoadmapText] = useState('计划在 2026年Q3 推出代号为 Ares 的下一代白板协作画布，重点攻克 Temu 海外团队对于多人同屏协同的排版性能痛点，首期销售目标为 1500万。');
+  const [maskedWords, setMaskedWords] = useState([
+    { raw: 'Ares', masked: '[Project_Beta_A]' },
+    { raw: 'Temu', masked: '[Client_Gamma_B]' },
+    { raw: '1500万', masked: '[Revenue_Target_C]' }
+  ]);
+  const [customTaxonomy, setCustomTaxonomy] = useState([]);
+
   // Load API keys from localStorage on mount
   useEffect(() => {
     const savedKeys = localStorage.getItem('competitor_agent_keys');
@@ -62,12 +82,43 @@ export default function App() {
     setLogs(prev => [...prev, message]);
   };
 
+  // Billing credit deduction
+  const handleDeductCredits = (amount, action) => {
+    setCredits(prev => Math.max(0, prev - amount));
+    setBillingLogs(prev => [
+      {
+        date: new Date().toISOString().replace('T', ' ').substring(0, 16),
+        action: action,
+        tokens: Math.round(amount * 1000),
+        credits: amount
+      },
+      ...prev
+    ]);
+  };
+
+  // Billing recharge
+  const handleRecharge = (amount) => {
+    setCredits(prev => prev + amount);
+    setBillingLogs(prev => [
+      {
+        date: new Date().toISOString().replace('T', ' ').substring(0, 16),
+        action: 'Token 积分充值',
+        tokens: 0,
+        credits: -amount
+      },
+      ...prev
+    ]);
+  };
+
   // Action: Launch Search Agent
   const handleStartSearch = async (config) => {
     setTargetCompany(config.targetCompany);
     setCompetitors(config.competitors);
     setFocusAreas(config.focusAreas);
     
+    // Deduct credits for search initiation
+    handleDeductCredits(12.4, 'Radar Agent: 竞品信源并行检索');
+
     // Reset and start
     setLogs([]);
     setProgress(0);
@@ -108,6 +159,9 @@ export default function App() {
   const handleConfirmSources = async (selectedSources) => {
     setApprovedSources(selectedSources);
     
+    // Deduct credits for report synthesis
+    handleDeductCredits(28.2, 'Radar Agent: SWOT与功能对比分析生成');
+
     // Reset process values
     setLogs([]);
     setProgress(0);
@@ -158,10 +212,10 @@ export default function App() {
         <div>
           <h1 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <Sparkles size={28} style={{ color: 'var(--primary)' }} />
-            Competitor Intelligence Agent
+            Airstack
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
-            AI 竞品商业情报分析与人机协作工作区
+            企业级 AI 竞品雷达与人机协同分析工作区
           </p>
         </div>
 
@@ -181,99 +235,170 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Content Layout based on current step */}
+      {/* Tab Navigation */}
+      <div className="workspace-tabs">
+        <button 
+          className={`workspace-tab-btn ${activeTab === 'radar' ? 'active' : ''}`}
+          onClick={() => setActiveTab('radar')}
+        >
+          📢 竞品雷达 (Radar)
+        </button>
+        <button 
+          className={`workspace-tab-btn ${activeTab === 'benchmark' ? 'active' : ''}`}
+          onClick={() => setActiveTab('benchmark')}
+        >
+          🛠️ 基准图谱融合 (Merger)
+        </button>
+        <button 
+          className={`workspace-tab-btn ${activeTab === 'masking' ? 'active' : ''}`}
+          onClick={() => setActiveTab('masking')}
+        >
+          🛡️ 数据安全脱敏 (PII)
+        </button>
+        <button 
+          className={`workspace-tab-btn ${activeTab === 'lark' ? 'active' : ''}`}
+          onClick={() => setActiveTab('lark')}
+        >
+          💬 飞书智能助理 (Lark Bot)
+        </button>
+        <button 
+          className={`workspace-tab-btn ${activeTab === 'credits' ? 'active' : ''}`}
+          onClick={() => setActiveTab('credits')}
+        >
+          🪙 积分与钱包 (Wallet)
+        </button>
+      </div>
+
+      {/* Main Content Layout based on active tab and current step */}
       <main>
-        {step === 'setup' && (
-          <div className="grid-main">
-            {/* Left: Input Setup */}
-            <SetupPanel
-              onStart={handleStartSearch}
-              onOpenSettings={() => setIsSettingsOpen(true)}
-              isMockMode={isMockMode}
-            />
+        {activeTab === 'radar' && (
+          <>
+            {step === 'setup' && (
+              <div className="grid-main">
+                {/* Left: Input Setup */}
+                <SetupPanel
+                  onStart={handleStartSearch}
+                  onOpenSettings={() => setIsSettingsOpen(true)}
+                  isMockMode={isMockMode}
+                />
 
-            {/* Right: Informational UI Panel for AI PM showcase */}
-            <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              <div className="badge badge-cyan" style={{ width: 'fit-content' }}>💡 AI PM 面试核心考点说明</div>
-              
-              <h3 style={{ fontSize: '1.25rem', fontFamily: 'var(--font-display)' }}>
-                如何向面试官演示这个项目？
-              </h3>
-              
-              <div style={styles.introSteps}>
-                <div style={styles.introStepItem}>
-                  <div style={styles.stepNum}>1</div>
-                  <div>
-                    <strong>介绍 HITL 人机协作机制</strong><br />
-                    <span style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
-                      说明为了避免大模型自主循环检索产生的“代理漂移”（越搜越偏）及幻觉，你在第2步引入了人工纠偏网关，确保清洗源数据后再执行报告生成。
-                    </span>
-                  </div>
-                </div>
+                {/* Right: Informational UI Panel for AI PM showcase */}
+                <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                  <div className="badge badge-cyan" style={{ width: 'fit-content' }}>💡 Airstack 企业升级演示指南</div>
+                  
+                  <h3 style={{ fontSize: '1.25rem', fontFamily: 'var(--font-display)' }}>
+                    如何向面试官展示本系统？
+                  </h3>
+                  
+                  <div style={styles.introSteps}>
+                    <div style={styles.introStepItem}>
+                      <div style={styles.stepNum}>1</div>
+                      <div>
+                        <strong>定义并融合对比基准 (Benchmark)</strong><br />
+                        <span style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
+                          切换至【基准图谱融合】选项卡，您可以融合 AI 抓取的大纲与自定义标准指标，自动拼凑出产品对比基准图谱。
+                        </span>
+                      </div>
+                    </div>
 
-                <div style={styles.introStepItem}>
-                  <div style={styles.stepNum}>2</div>
-                  <div>
-                    <strong>介绍 Token 成本控制与效率</strong><br />
-                    <span style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
-                      说明在实际商用场景中，人工过滤了无关网页，避免将垃圾长文本发给模型进行推理，有效降低了 **40% 以上** 的 Token 推理开销。
-                    </span>
-                  </div>
-                </div>
+                    <div style={styles.introStepItem}>
+                      <div style={styles.stepNum}>2</div>
+                      <div>
+                        <strong>测试 Roadmap 敏感词脱敏 (PII)</strong><br />
+                        <span style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
+                          进入【数据安全脱敏】录入敏感产品规划，体验本地替换为占位符并在本地安全还原的安全防护机制。
+                        </span>
+                      </div>
+                    </div>
 
-                <div style={styles.introStepItem}>
-                  <div style={styles.stepNum}>3</div>
-                  <div>
-                    <strong>演示 Mock 体验与自备 Key 扩展</strong><br />
-                    <span style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
-                      点击右上角的**“密钥设置”**可以输入您自己的 Gemini/OpenAI 及 Tavily Key，项目将无缝从 Mock 模式切换为真实的实时抓取分析。
-                    </span>
+                    <div style={styles.introStepItem}>
+                      <div style={styles.stepNum}>3</div>
+                      <div>
+                        <strong>体验飞书双向协同闭环 (Lark Bot)</strong><br />
+                        <span style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
+                          前往【飞书智能助理】接收日报推送，进行双向对话并执行“一键生成飞书文档”或“对比 Roadmap”。
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            )}
+
+            {step === 'searching' && (
+              <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+                <ThoughtLog
+                  progress={progress}
+                  statusText={statusText}
+                  logs={logs}
+                  targetCompany={targetCompany}
+                  competitors={competitors}
+                />
+              </div>
+            )}
+
+            {step === 'hitl' && (
+              <SourceSelector
+                sources={sources}
+                onConfirm={handleConfirmSources}
+                targetCompany={targetCompany}
+                competitors={competitors}
+              />
+            )}
+
+            {step === 'synthesizing' && (
+              <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+                <ThoughtLog
+                  progress={progress}
+                  statusText={statusText}
+                  logs={logs}
+                  targetCompany={targetCompany}
+                  competitors={competitors}
+                />
+              </div>
+            )}
+
+            {step === 'report' && reportData && (
+              <ReportDashboard
+                reportData={reportData}
+                onRestart={handleRestart}
+                targetCompany={targetCompany}
+                competitors={competitors}
+              />
+            )}
+          </>
         )}
 
-        {step === 'searching' && (
-          <div style={{ maxWidth: '680px', margin: '0 auto' }}>
-            <ThoughtLog
-              progress={progress}
-              statusText={statusText}
-              logs={logs}
-              targetCompany={targetCompany}
-              competitors={competitors}
-            />
-          </div>
-        )}
-
-        {step === 'hitl' && (
-          <SourceSelector
-            sources={sources}
-            onConfirm={handleConfirmSources}
-            targetCompany={targetCompany}
-            competitors={competitors}
+        {activeTab === 'benchmark' && (
+          <BenchmarkMerger
+            onMerge={(merged) => setCustomTaxonomy(merged)}
+            currentBaseline={customTaxonomy}
           />
         )}
 
-        {step === 'synthesizing' && (
-          <div style={{ maxWidth: '680px', margin: '0 auto' }}>
-            <ThoughtLog
-              progress={progress}
-              statusText={statusText}
-              logs={logs}
-              targetCompany={targetCompany}
-              competitors={competitors}
-            />
-          </div>
+        {activeTab === 'masking' && (
+          <PiiMasking
+            roadmapText={roadmapText}
+            onRoadmapChange={setRoadmapText}
+            maskedWords={maskedWords}
+            onMaskedWordsChange={setMaskedWords}
+          />
         )}
 
-        {step === 'report' && reportData && (
-          <ReportDashboard
-            reportData={reportData}
-            onRestart={handleRestart}
-            targetCompany={targetCompany}
-            competitors={competitors}
+        {activeTab === 'lark' && (
+          <LarkBotSim
+            roadmapText={roadmapText}
+            maskedWords={maskedWords}
+            generatedReport={reportData}
+            onDeductCredits={handleDeductCredits}
+          />
+        )}
+
+        {activeTab === 'credits' && (
+          <CreditsWallet
+            credits={credits}
+            billingLogs={billingLogs}
+            onRecharge={handleRecharge}
           />
         )}
       </main>
