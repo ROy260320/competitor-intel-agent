@@ -51,11 +51,11 @@ export default function SetupPanel({ onStart }) {
   };
 
   return (
-    <div className="glass-panel" style={styles.card}>
-      <div style={styles.cardHeader}>
+    <div className="glass-panel main-panel-card">
+      <div className="panel-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Cpu size={18} style={{ color: 'var(--primary)' }} />
-          <h2 style={{ fontSize: '1.25rem', fontFamily: 'var(--font-display)' }}>配置 Intelligence Agent</h2>
+          <h2 className="panel-title">配置 Intelligence Agent</h2>
         </div>
       </div>
 
@@ -120,7 +120,7 @@ export default function SetupPanel({ onStart }) {
         {/* Intelligence Focus Areas */}
         <div className="form-group">
           <label className="form-label">关注情报领域</label>
-          <div style={styles.checkboxContainer}>
+          <div className="checkbox-grid-responsive">
             <label style={styles.checkboxLabel}>
               <input
                 type="checkbox"
@@ -128,7 +128,7 @@ export default function SetupPanel({ onStart }) {
                 onChange={() => toggleFocusArea('pricing')}
                 style={styles.checkbox}
               />
-              <div style={{ ...styles.checkboxCustom, ...(focusAreas.includes('pricing') ? styles.checkboxActive : {}) }}>
+              <div className={`checkbox-custom-responsive ${focusAreas.includes('pricing') ? 'active' : ''}`}>
                 <span style={{ fontSize: '0.85rem' }}>💰 价格与订阅变动</span>
               </div>
             </label>
@@ -140,7 +140,7 @@ export default function SetupPanel({ onStart }) {
                 onChange={() => toggleFocusArea('features')}
                 style={styles.checkbox}
               />
-              <div style={{ ...styles.checkboxCustom, ...(focusAreas.includes('features') ? styles.checkboxActive : {}) }}>
+              <div className={`checkbox-custom-responsive ${focusAreas.includes('features') ? 'active' : ''}`}>
                 <span style={{ fontSize: '0.85rem' }}>🚀 功能特性/版本日志</span>
               </div>
             </label>
@@ -152,7 +152,7 @@ export default function SetupPanel({ onStart }) {
                 onChange={() => toggleFocusArea('complaints')}
                 style={styles.checkbox}
               />
-              <div style={{ ...styles.checkboxCustom, ...(focusAreas.includes('complaints') ? styles.checkboxActive : {}) }}>
+              <div className={`checkbox-custom-responsive ${focusAreas.includes('complaints') ? 'active' : ''}`}>
                 <span style={{ fontSize: '0.85rem' }}>💬 用户痛点与吐槽反馈</span>
               </div>
             </label>
@@ -160,7 +160,7 @@ export default function SetupPanel({ onStart }) {
         </div>
 
         {/* Submit */}
-        <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '0.5rem' }}>
+        <button type="submit" className="btn btn-primary form-submit-btn">
           <Play size={16} /> 启动情报搜集 Agent
         </button>
       </form>

@@ -43,16 +43,18 @@ export default function BenchmarkMerger({ onMerge, currentBaseline = [] }) {
   };
 
   return (
-    <div className="glass-panel" style={{ padding: '2rem' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
-        <GitMerge size={24} style={{ color: 'var(--primary)' }} />
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem' }}>基准图谱融合器 (Benchmark Merger)</h2>
+    <div className="glass-panel main-panel-card">
+      <div className="panel-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <GitMerge size={24} style={{ color: 'var(--primary)' }} />
+          <h2 className="panel-title">基准图谱融合器 (Benchmark Merger)</h2>
+        </div>
       </div>
       <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: '1.6' }}>
         AI 将自动提取巨头竞品的功能清单，并与您预设的业务标准指标进行“人机融合”，从而定义出一份独一无二的“行业基准功能对照图谱”。
       </p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }} className="pii-grid">
+      <div className="split-grid-responsive">
         {/* Left Column: AI Drafts */}
         <div style={{ background: 'rgba(0, 0, 0, 0.02)', border: '1px solid rgba(0, 0, 0, 0.05)', padding: '1.25rem', borderRadius: 'var(--radius-md)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '1rem', color: 'var(--accent-cyan)' }}>
@@ -137,7 +139,7 @@ export default function BenchmarkMerger({ onMerge, currentBaseline = [] }) {
         </div>
       </div>
 
-      <button className="btn btn-primary" onClick={handleMerge} style={{ width: '100%', padding: '0.9rem' }}>
+      <button className="btn btn-primary form-submit-btn" onClick={handleMerge}>
         <GitMerge size={16} /> 融合基准并生成综合对比表
       </button>
     </div>

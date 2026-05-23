@@ -92,11 +92,11 @@ export default function PiiMasking({ roadmapText, onRoadmapChange, maskedWords, 
   };
 
   return (
-    <div className="glass-panel" style={{ padding: '2rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+    <div className="glass-panel main-panel-card">
+      <div className="panel-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Shield size={24} style={{ color: 'var(--accent-emerald)' }} />
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem' }}>安全脱敏防泄露引擎 (Roadmap PII Masking)</h2>
+          <h2 className="panel-title">安全脱敏防泄露引擎 (Roadmap PII Masking)</h2>
         </div>
         <button 
           className="btn btn-secondary" 
@@ -114,7 +114,7 @@ export default function PiiMasking({ roadmapText, onRoadmapChange, maskedWords, 
         </span>
       </div>
 
-      <div className="pii-grid">
+      <div className="split-grid-responsive">
         {/* Left Side: Inputs */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <div className="form-group" style={{ marginBottom: 0 }}>

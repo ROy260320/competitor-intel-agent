@@ -193,24 +193,13 @@ export default function App() {
           </p>
         </div>
 
-        <div className="header-meta" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+        <div className="header-meta">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: '600' }}>🤖 AI 智能模型:</span>
             <select
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
-              className="form-input"
-              style={{
-                padding: '0.4rem 2rem 0.4rem 0.75rem',
-                fontSize: '0.85rem',
-                borderRadius: '10px',
-                width: '210px',
-                background: 'rgba(255, 255, 255, 0.75)',
-                border: '1px solid rgba(0, 0, 0, 0.08)',
-                cursor: 'pointer',
-                fontFamily: 'var(--font-sans)',
-                fontWeight: '500'
-              }}
+              className="model-selector-select"
             >
               <option value="google/gemini-2.5-flash">Gemini 2.5 Flash (推荐)</option>
               <option value="deepseek/deepseek-chat">DeepSeek V3 (分析首选)</option>
@@ -269,7 +258,7 @@ export default function App() {
         {activeTab === 'radar' && (
           <>
             {step === 'setup' && (
-              <div style={{ maxWidth: '580px', margin: '2rem auto 0' }}>
+              <div className="setup-panel-container">
                 <SetupPanel
                   onStart={handleStartSearch}
                 />
@@ -277,7 +266,7 @@ export default function App() {
             )}
 
             {step === 'searching' && (
-              <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+              <div className="thought-log-container">
                 <ThoughtLog
                   progress={progress}
                   statusText={statusText}
@@ -298,7 +287,7 @@ export default function App() {
             )}
 
             {step === 'synthesizing' && (
-              <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+              <div className="thought-log-container">
                 <ThoughtLog
                   progress={progress}
                   statusText={statusText}

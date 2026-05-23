@@ -61,11 +61,11 @@ export default function ReportDashboard({ reportData, onRestart, targetCompany, 
   const activeSwot = swot[selectedSwotCompany] || { strengths: [], weaknesses: [], opportunities: [], threats: [] };
 
   return (
-    <div className="glass-panel" style={styles.container}>
-      <div style={styles.header}>
+    <div className="glass-panel main-panel-card">
+      <div className="panel-header">
         <div>
           <span className="badge badge-purple" style={{ marginBottom: '8px' }}>✨ 生成完毕</span>
-          <h2 style={{ fontSize: '1.75rem', fontFamily: 'var(--font-display)' }}>
+          <h2 className="panel-title">
             竞品商业情报看板
           </h2>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
@@ -73,7 +73,7 @@ export default function ReportDashboard({ reportData, onRestart, targetCompany, 
           </p>
         </div>
         
-        <div style={styles.btnGroup}>
+        <div className="btn-group-responsive">
           <button className="btn btn-secondary" onClick={onRestart} style={{ height: '42px' }}>
             <ArrowLeft size={16} /> 重新分析
           </button>
@@ -121,18 +121,15 @@ export default function ReportDashboard({ reportData, onRestart, targetCompany, 
         {/* Tab 1: SWOT Matrix */}
         {activeTab === 'swot' && (
           <div>
-            <div style={styles.swotHeader}>
+            <div className="swot-header-responsive">
               <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: '500' }}>
                 选择查看公司 SWOT：
               </span>
-              <div style={styles.companySelectors}>
+              <div className="company-selectors-responsive">
                 {allCompanies.map(c => (
                   <button
                     key={c}
-                    style={{
-                      ...styles.companySelectBtn,
-                      ...(selectedSwotCompany === c ? styles.companySelectBtnActive : {})
-                    }}
+                    className={`company-select-btn-responsive ${selectedSwotCompany === c ? 'active' : ''}`}
                     onClick={() => setSelectedSwotCompany(c)}
                   >
                     {c} {c === targetCompany && "(主)"}

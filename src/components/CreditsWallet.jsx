@@ -34,15 +34,17 @@ export default function CreditsWallet({ credits = 1000000, billingLogs = [], onR
   const strokeDashoffset = circumference - (percent / 100) * circumference;
 
   return (
-    <div className="glass-panel" style={{ padding: '2rem' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
-        <Wallet size={24} style={{ color: 'var(--accent-amber)' }} />
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem' }}>Token 积分中心 & 计费账单</h2>
+    <div className="glass-panel main-panel-card">
+      <div className="panel-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Wallet size={24} style={{ color: 'var(--accent-amber)' }} />
+          <h2 className="panel-title">Token 积分中心 & 计费账单</h2>
+        </div>
       </div>
 
       <div className="wallet-card-grid">
         {/* Left Side: Circular Usage Widget */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(0, 0, 0, 0.02)', border: '1px solid rgba(0, 0, 0, 0.05)', padding: '1.5rem', borderRadius: 'var(--radius-md)' }}>
+        <div className="wallet-sub-panel" style={{ alignItems: 'center' }}>
           <h3 style={{ fontSize: '0.95rem', fontWeight: '600', marginBottom: '1rem', color: 'var(--text-primary)' }}>可用 Token 积分余额</h3>
           
           <div className="wallet-circle-progress">
@@ -112,7 +114,7 @@ export default function CreditsWallet({ credits = 1000000, billingLogs = [], onR
         </div>
 
         {/* Right Side: Billing Ledger Log */}
-        <div style={{ background: 'rgba(0, 0, 0, 0.02)', border: '1px solid rgba(0, 0, 0, 0.05)', padding: '1.5rem', borderRadius: 'var(--radius-md)', display: 'flex', flexDirection: 'column' }}>
+        <div className="wallet-sub-panel">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <h3 style={{ fontSize: '0.95rem', fontWeight: '600', color: 'var(--text-primary)' }}>实时积分消费对账单 (Billing Ledger)</h3>
             <Coins size={16} style={{ color: 'var(--accent-amber)' }} />

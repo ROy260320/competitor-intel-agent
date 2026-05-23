@@ -165,16 +165,14 @@ export default function LarkBotSim({ roadmapText, maskedWords, generatedReport, 
       {/* Sub Tabs */}
       <div className="tab-list" style={{ marginBottom: '1.25rem' }}>
         <button
-          className={`tab-trigger ${subTab === 'chat' ? 'active' : ''}`}
+          className={`tab-trigger lark-subtab-trigger ${subTab === 'chat' ? 'active' : ''}`}
           onClick={() => setSubTab('chat')}
-          style={{ fontSize: '0.85rem', padding: '0.5rem 1rem' }}
         >
           💬 智能助手对话窗
         </button>
         <button
-          className={`tab-trigger ${subTab === 'integration' ? 'active' : ''}`}
+          className={`tab-trigger lark-subtab-trigger ${subTab === 'integration' ? 'active' : ''}`}
           onClick={() => setSubTab('integration')}
-          style={{ fontSize: '0.85rem', padding: '0.5rem 1rem' }}
         >
           🔌 飞书开放平台集成
         </button>
@@ -287,15 +285,15 @@ export default function LarkBotSim({ roadmapText, maskedWords, generatedReport, 
       )}
 
       {subTab === 'integration' && (
-        <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div className="glass-panel main-panel-card" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontFamily: 'var(--font-display)', marginBottom: '0.5rem' }}>🔌 飞书开放平台自建应用配置</h3>
+            <h3 className="panel-title" style={{ marginBottom: '0.5rem' }}>🔌 飞书开放平台自建应用配置</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
               将 Airstack 竞品雷达接入真实的飞书企业机器人，支持在单聊或群聊中进行双向交互、一键生成飞书云文档与路线图预警。
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }} className="pii-grid">
+          <div className="split-grid-responsive">
             {/* Left Column: Configuration Forms */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div className="form-group" style={{ marginBottom: 0 }}>
