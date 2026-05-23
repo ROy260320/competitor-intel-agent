@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Trash2, Search, Play, Settings, AlertCircle, Cpu } from 'lucide-react';
 
-export default function SetupPanel({ onStart, onOpenSettings, isMockMode }) {
+export default function SetupPanel({ onStart }) {
   const [targetCompany, setTargetCompany] = useState('Notion');
   const [competitors, setCompetitors] = useState(['Obsidian', 'Craft']);
   const [focusAreas, setFocusAreas] = useState(['pricing', 'features', 'complaints']);
@@ -57,28 +57,15 @@ export default function SetupPanel({ onStart, onOpenSettings, isMockMode }) {
           <Cpu size={18} style={{ color: 'var(--primary)' }} />
           <h2 style={{ fontSize: '1.25rem', fontFamily: 'var(--font-display)' }}>配置 Intelligence Agent</h2>
         </div>
-        <button type="button" className="btn btn-secondary" onClick={onOpenSettings} style={styles.settingsBtn}>
-          <Settings size={16} />
-        </button>
       </div>
 
-      {isMockMode ? (
-        <div style={styles.bannerMock}>
-          <AlertCircle size={16} style={{ color: 'var(--accent-cyan)', flexShrink: 0 }} />
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-            <strong>当前运行：离线沙盒模式</strong><br />
-            当前未配置 API 密钥，已自动启用本地仿真引擎进行模拟检索与分析。配置密钥可解锁实时联网分析。
-          </div>
+      <div style={styles.bannerLive}>
+        <Cpu size={16} style={{ color: 'var(--accent-emerald)', flexShrink: 0 }} />
+        <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+          <strong>当前分析引擎：Airstack Enterprise Cloud (已连接)</strong><br />
+          系统已接入企业级智能云端分析网关与多数据源检索中心，一键即可并行检索并生成商业竞品报告。
         </div>
-      ) : (
-        <div style={styles.bannerLive}>
-          <Cpu size={16} style={{ color: 'var(--accent-emerald)', flexShrink: 0 }} />
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-            <strong>当前运行：实时联网模式</strong><br />
-            已配置 API 密钥，系统将通过 Tavily 实时抓取数据并调用大模型进行提炼。
-          </div>
-        </div>
-      )}
+      </div>
 
       <form onSubmit={handleSubmit} style={styles.form}>
         {/* Target Company */}

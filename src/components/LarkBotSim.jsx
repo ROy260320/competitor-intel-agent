@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Send, FileText, AlertTriangle, ShieldCheck, X, FileEdit } from 'lucide-react';
 
 export default function LarkBotSim({ roadmapText, maskedWords, generatedReport, onDeductCredits }) {
+  const [subTab, setSubTab] = useState('chat'); // 'chat' | 'integration'
   const [messages, setMessages] = useState([
     {
       id: 'm1',
@@ -161,7 +162,26 @@ export default function LarkBotSim({ roadmapText, maskedWords, generatedReport, 
 
   return (
     <div style={{ position: 'relative' }}>
-      <div className="lark-chat-container">
+      {/* Sub Tabs */}
+      <div className="tab-list" style={{ marginBottom: '1.25rem' }}>
+        <button
+          className={`tab-trigger ${subTab === 'chat' ? 'active' : ''}`}
+          onClick={() => setSubTab('chat')}
+          style={{ fontSize: '0.85rem', padding: '0.5rem 1rem' }}
+        >
+          💬 智能助手对话窗
+        </button>
+        <button
+          className={`tab-trigger ${subTab === 'integration' ? 'active' : ''}`}
+          onClick={() => setSubTab('integration')}
+          style={{ fontSize: '0.85rem', padding: '0.5rem 1rem' }}
+        >
+          🔌 飞书开放平台集成
+        </button>
+      </div>
+
+      {subTab === 'chat' && (
+        <div className="lark-chat-container">
         {/* Chat Header */}
         <div className="lark-chat-header">
           <div className="lark-chat-avatar">A</div>
@@ -264,6 +284,126 @@ export default function LarkBotSim({ roadmapText, maskedWords, generatedReport, 
           </button>
         </div>
       </div>
+      )}
+
+      {subTab === 'integration' && (
+        <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div>
+            <h3 style={{ fontSize: '1.25rem', fontFamily: 'var(--font-display)', marginBottom: '0.5rem' }}>🔌 飞书开放平台自建应用配置</h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+              将 Airstack 竞品雷达接入真实的飞书企业机器人，支持在单聊或群聊中进行双向交互、一键生成飞书云文档与路线图预警。
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }} className="pii-grid">
+            {/* Left Column: Configuration Forms */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label">飞书自建 App ID (cli_id)</label>
+                <input type="text" className="form-input" defaultValue="cli_a5e9b08f12d8a00c" readOnly style={{ background: 'rgba(0,0,0,0.02)' }} />
+              </div>
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label">App Secret</label>
+                <input type="password" className="form-input" defaultValue="••••••••••••••••••••••••••••••••" readOnly style={{ background: 'rgba(0,0,0,0.02)' }} />
+              </div>
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label">事件订阅 Encrypt Key</label>
+                <input type="password" className="form-input" defaultValue="••••••••••••••••••••••••••••••••" readOnly style={{ background: 'rgba(0,0,0,0.02)' }} />
+              </div>
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label">事件订阅 Verification Token</label>
+                <input type="password" className="form-input" defaultValue="••••••••••••••••••••••••••••••••" readOnly style={{ background: 'rgba(0,0,0,0.02)' }} />
+              </div>
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label">事件请求网址 (Request URL / Webhook Endpoint)</label>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <input type="text" className="form-input" readOnly value="https://api.airstack.com/v1/lark/webhook" style={{ background: 'rgba(0, 0, 0, 0.02)' }} />
+                  <button type="button" className="btn btn-secondary" onClick={() => {
+                    navigator.clipboard.writeText('https://api.airstack.com/v1/lark/webhook');
+                    alert('Webhook 网址已复制到剪贴板！');
+                  }} style={{ padding: '0 1rem', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>复制</button>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Steps Guide */}
+            <div style={{ background: 'rgba(0, 0, 0, 0.02)', border: '1px solid rgba(0, 0, 0, 0.05)', padding: '1.25rem', borderRadius: 'var(--radius-md)', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <h4 style={{ fontSize: '0.95rem', fontWeight: '600', color: 'var(--primary)' }}>📋 飞书后台设置步骤</h4>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', fontSize: '0.825rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                <div>
+                  <strong>第一步：启用机器人功能</strong><br />
+                  进入飞书自建应用后台，在【应用功能】中启用【机器人】能力。
+                </div>
+                <div>
+                  <strong>第二步：配置事件订阅地址</strong><br />
+                  在【事件订阅】中配置上方的『事件请求网址』，点击保存通过飞书的 Challenge 验证。
+                </div>
+                <div>
+                  <strong>第三步：订阅消息事件与开通权限</strong><br />
+                  - 订阅事件：`接收消息 v1` (im.message.receive_v1)<br />
+                  - 申请权限：`获取单聊群聊消息`、`发送单聊群聊消息` 等权限。
+                </div>
+                <div>
+                  <strong>第四步：版本发布上线</strong><br />
+                  在【版本管理与发布】中创建应用版本并提交发布申请，企业管理员审批通过后，即可在群聊或私聊中与 AI 助手直接交互。
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Webhook Code Template Section */}
+          <div style={{ marginTop: '0.5rem' }}>
+            <h4 style={{ fontSize: '0.9rem', fontWeight: '600', marginBottom: '0.75rem', color: 'var(--text-primary)' }}>📦 接收服务 Node.js 实现参考 (Webhook Server Template)</h4>
+            <pre style={{ 
+              fontSize: '0.78rem', 
+              color: 'var(--text-secondary)', 
+              lineHeight: '1.5', 
+              fontFamily: 'monospace',
+              background: 'rgba(0, 0, 0, 0.02)',
+              border: '1px solid rgba(0, 0, 0, 0.05)',
+              padding: '1rem',
+              borderRadius: 'var(--radius-sm)',
+              maxHeight: '180px',
+              overflowY: 'auto'
+            }}>
+{`const express = require('express');
+const axios = require('axios');
+const app = express();
+app.use(express.json());
+
+// 飞书开放平台事件请求接收网关
+app.post('/lark/webhook', async (req, res) => {
+  const { challenge, token, header, event } = req.body;
+  
+  // 1. 飞书 URL 校验 (Challenge 验证)
+  if (challenge) {
+    return res.json({ challenge });
+  }
+  
+  // 2. 校验消息 Token
+  if (token !== process.env.LARK_VERIFICATION_TOKEN) {
+    return res.status(403).send('Forbidden');
+  }
+  
+  // 3. 处理接收消息事件
+  if (header && header.event_type === 'im.message.receive_v1') {
+    const text = JSON.parse(event.message.content).text;
+    const chatId = event.message.chat_id;
+    
+    // 调用 Airstack 竞品雷达 AI 分析引擎
+    const aiResponse = await callAirstackAIEngine(text);
+    
+    // 回传给飞书用户或群组
+    await replyToLark(chatId, aiResponse);
+  }
+  
+  res.status(200).send('success');
+});`}
+            </pre>
+          </div>
+        </div>
+      )}
 
       {/* Simulated Lark Doc Fullscreen Overlay */}
       {showDocOverlay && (

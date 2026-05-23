@@ -42,13 +42,13 @@ export default function CreditsWallet({ credits = 1000000, billingLogs = [], onR
 
       <div className="wallet-card-grid">
         {/* Left Side: Circular Usage Widget */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255, 255, 255, 0.05)', padding: '1.5rem', borderRadius: 'var(--radius-md)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(0, 0, 0, 0.02)', border: '1px solid rgba(0, 0, 0, 0.05)', padding: '1.5rem', borderRadius: 'var(--radius-md)' }}>
           <h3 style={{ fontSize: '0.95rem', fontWeight: '600', marginBottom: '1rem', color: 'var(--text-primary)' }}>可用 Token 积分余额</h3>
           
           <div className="wallet-circle-progress">
             <svg height={radius * 2} width={radius * 2}>
               <circle
-                stroke="rgba(255, 255, 255, 0.05)"
+                stroke="rgba(0, 0, 0, 0.06)"
                 fill="transparent"
                 strokeWidth={stroke}
                 r={normalizedRadius}
@@ -79,7 +79,7 @@ export default function CreditsWallet({ credits = 1000000, billingLogs = [], onR
           </div>
 
           <div style={{ width: '100%' }}>
-            <h4 style={{ fontSize: '0.85rem', fontWeight: '600', marginBottom: '0.5rem', color: '#fff', textAlign: 'left' }}>积分充值包 (模拟支付)</h4>
+            <h4 style={{ fontSize: '0.85rem', fontWeight: '600', marginBottom: '0.5rem', color: 'var(--text-primary)', textAlign: 'left' }}>积分充值包 (模拟支付)</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {packages.map(p => (
                 <div 
@@ -90,8 +90,8 @@ export default function CreditsWallet({ credits = 1000000, billingLogs = [], onR
                     justifyContent: 'space-between', 
                     alignItems: 'center', 
                     padding: '0.5rem 0.75rem', 
-                    background: 'rgba(255,255,255,0.02)',
-                    border: '1px solid rgba(255, 255, 255, 0.06)',
+                    background: 'rgba(255, 255, 255, 0.6)',
+                    border: '1px solid rgba(0, 0, 0, 0.06)',
                     borderRadius: '8px',
                     cursor: 'pointer',
                     transition: 'all var(--transition-fast)'
@@ -99,10 +99,10 @@ export default function CreditsWallet({ credits = 1000000, billingLogs = [], onR
                   className="interactive-row-hover"
                 >
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                    <span style={{ fontSize: '0.78rem', fontWeight: '600', color: '#fff' }}>+{p.credits.toLocaleString()} pts</span>
+                    <span style={{ fontSize: '0.78rem', fontWeight: '600', color: 'var(--text-primary)' }}>+{p.credits.toLocaleString()} pts</span>
                     <span style={{ fontSize: '0.65rem', color: 'var(--accent-amber)' }}>{p.desc} · {p.bonus}</span>
                   </div>
-                  <span style={{ fontSize: '0.78rem', color: '#fff', background: 'rgba(245, 158, 11, 0.15)', padding: '0.2rem 0.5rem', borderRadius: '6px', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--accent-amber)', background: 'rgba(245, 158, 11, 0.08)', padding: '0.2rem 0.5rem', borderRadius: '6px', border: '1px solid rgba(245, 158, 11, 0.15)' }}>
                     ￥{p.price}
                   </span>
                 </div>
@@ -112,7 +112,7 @@ export default function CreditsWallet({ credits = 1000000, billingLogs = [], onR
         </div>
 
         {/* Right Side: Billing Ledger Log */}
-        <div style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255, 255, 255, 0.05)', padding: '1.5rem', borderRadius: 'var(--radius-md)', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ background: 'rgba(0, 0, 0, 0.02)', border: '1px solid rgba(0, 0, 0, 0.05)', padding: '1.5rem', borderRadius: 'var(--radius-md)', display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <h3 style={{ fontSize: '0.95rem', fontWeight: '600', color: 'var(--text-primary)' }}>实时积分消费对账单 (Billing Ledger)</h3>
             <Coins size={16} style={{ color: 'var(--accent-amber)' }} />

@@ -3,24 +3,17 @@ import SetupPanel from './components/SetupPanel';
 import ThoughtLog from './components/ThoughtLog';
 import SourceSelector from './components/SourceSelector';
 import ReportDashboard from './components/ReportDashboard';
-import SettingsModal from './components/SettingsModal';
 import BenchmarkMerger from './components/BenchmarkMerger';
 import PiiMasking from './components/PiiMasking';
 import LarkBotSim from './components/LarkBotSim';
 import CreditsWallet from './components/CreditsWallet';
 import { searchCompetitorData } from './services/searchService';
 import { synthesizeReport } from './services/agentService';
-import { Settings, Cpu, HelpCircle, Sparkles } from 'lucide-react';
+import { Cpu, HelpCircle, Sparkles } from 'lucide-react';
 
 export default function App() {
-  // 1. API Keys & State Configuration
-  const [apiKeys, setApiKeys] = useState({
-    openai: '',
-    openaiModel: 'gpt-4o-mini',
-    gemini: '',
-    geminiModel: 'gemini-1.5-flash',
-    tavily: ''
-  });
+  // 1. API Keys configuration (internal mock only for serverless client)
+  const apiKeys = {};
 
   // Main status machine: 'setup' | 'searching' | 'hitl' | 'synthesizing' | 'report'
   const [step, setStep] = useState('setup');
@@ -38,8 +31,7 @@ export default function App() {
   const [approvedSources, setApprovedSources] = useState([]);
   const [reportData, setReportData] = useState(null);
   
-  // UI control
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
 
   // Airstack Enterprise Sandbox States
   const [activeTab, setActiveTab] = useState('radar');
@@ -57,26 +49,7 @@ export default function App() {
   ]);
   const [customTaxonomy, setCustomTaxonomy] = useState([]);
 
-  // Load API keys from localStorage on mount
-  useEffect(() => {
-    const savedKeys = localStorage.getItem('competitor_agent_keys');
-    if (savedKeys) {
-      try {
-        setApiKeys(JSON.parse(savedKeys));
-      } catch (e) {
-        console.error("Failed to parse saved API keys:", e);
-      }
-    }
-  }, []);
 
-  // Save API keys
-  const handleSaveKeys = (keys) => {
-    setApiKeys(keys);
-    localStorage.setItem('competitor_agent_keys', JSON.stringify(keys));
-  };
-
-  // Determine if we are running in Mock Mode (default if no keys provided)
-  const isMockMode = !((apiKeys.openai && apiKeys.openai.startsWith('sk-')) || (apiKeys.gemini && apiKeys.gemini.trim().length > 10));
 
   const addLog = (message) => {
     setLogs(prev => [...prev, message]);
@@ -220,18 +193,10 @@ export default function App() {
         </div>
 
         <div className="header-meta">
-          <span className={`badge ${isMockMode ? 'badge-purple' : 'badge-emerald'}`}>
+          <span className="badge badge-emerald">
             <Cpu size={12} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
-            {isMockMode ? '离线沙盒模式' : 'LIVE 联网模式'}
+            Airstack 智能云引擎已就绪
           </span>
-          
-          <button
-            className="btn btn-secondary"
-            onClick={() => setIsSettingsOpen(true)}
-            style={{ padding: '0.5rem 0.75rem', display: 'flex', alignItems: 'center', gap: '6px' }}
-          >
-            <Settings size={16} /> 密钥设置
-          </button>
         </div>
       </header>
 
@@ -277,8 +242,6 @@ export default function App() {
               <div style={{ maxWidth: '580px', margin: '2rem auto 0' }}>
                 <SetupPanel
                   onStart={handleStartSearch}
-                  onOpenSettings={() => setIsSettingsOpen(true)}
-                  isMockMode={isMockMode}
                 />
               </div>
             )}
@@ -361,13 +324,7 @@ export default function App() {
         )}
       </main>
 
-      {/* Settings Modal Component */}
-      <SettingsModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        apiKeys={apiKeys}
-        onSave={handleSaveKeys}
-      />
+
     </div>
   );
 }

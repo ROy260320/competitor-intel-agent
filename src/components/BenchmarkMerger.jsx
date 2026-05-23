@@ -54,7 +54,7 @@ export default function BenchmarkMerger({ onMerge, currentBaseline = [] }) {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }} className="pii-grid">
         {/* Left Column: AI Drafts */}
-        <div style={{ background: 'rgba(255, 255, 255, 0.01)', border: '1px solid rgba(255, 255, 255, 0.05)', padding: '1.25rem', borderRadius: 'var(--radius-md)' }}>
+        <div style={{ background: 'rgba(0, 0, 0, 0.02)', border: '1px solid rgba(0, 0, 0, 0.05)', padding: '1.25rem', borderRadius: 'var(--radius-md)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '1rem', color: 'var(--accent-cyan)' }}>
             <Sparkles size={16} />
             <h3 style={{ fontSize: '1rem', fontWeight: '600' }}>AI 提取竞品功能大纲 (Top 3 标配)</h3>
@@ -71,7 +71,7 @@ export default function BenchmarkMerger({ onMerge, currentBaseline = [] }) {
                   padding: '0.65rem 0.85rem', 
                   borderRadius: 'var(--radius-sm)', 
                   background: item.selected ? 'rgba(6, 182, 212, 0.05)' : 'transparent',
-                  border: `1px solid ${item.selected ? 'rgba(6, 182, 212, 0.2)' : 'rgba(255, 255, 255, 0.05)'}`,
+                  border: `1px solid ${item.selected ? 'rgba(6, 182, 212, 0.2)' : 'rgba(0, 0, 0, 0.05)'}`,
                   cursor: 'pointer',
                   transition: 'all var(--transition-fast)'
                 }}
@@ -84,7 +84,7 @@ export default function BenchmarkMerger({ onMerge, currentBaseline = [] }) {
         </div>
 
         {/* Right Column: Custom Features */}
-        <div style={{ background: 'rgba(255, 255, 255, 0.01)', border: '1px solid rgba(255, 255, 255, 0.05)', padding: '1.25rem', borderRadius: 'var(--radius-md)' }}>
+        <div style={{ background: 'rgba(0, 0, 0, 0.02)', border: '1px solid rgba(0, 0, 0, 0.05)', padding: '1.25rem', borderRadius: 'var(--radius-md)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '1rem', color: 'var(--primary)' }}>
             <Plus size={16} />
             <h3 style={{ fontSize: '1rem', fontWeight: '600' }}>PM 手动自定义核心指标</h3>
@@ -114,8 +114,8 @@ export default function BenchmarkMerger({ onMerge, currentBaseline = [] }) {
                   justifyContent: 'space-between', 
                   alignItems: 'center', 
                   padding: '0.55rem 0.85rem', 
-                  background: 'rgba(255, 255, 255, 0.02)', 
-                  border: '1px solid rgba(255, 255, 255, 0.05)', 
+                  background: 'rgba(255, 255, 255, 0.6)', 
+                  border: '1px solid rgba(0, 0, 0, 0.06)', 
                   borderRadius: 'var(--radius-sm)' 
                 }}
               >

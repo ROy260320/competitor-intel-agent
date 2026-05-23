@@ -256,8 +256,8 @@ const styles = {
   sourceRow: {
     display: 'flex',
     gap: '1rem',
-    background: 'rgba(10, 8, 20, 0.4)',
-    border: '1px solid rgba(255, 255, 255, 0.04)',
+    background: 'rgba(255, 255, 255, 0.45)',
+    border: '1px solid rgba(0, 0, 0, 0.06)',
     borderRadius: 'var(--radius-md)',
     padding: '1rem',
     cursor: 'pointer',
@@ -336,8 +336,8 @@ const styles = {
   customForm: {
     marginTop: '0.5rem',
     padding: '1.25rem',
-    background: 'rgba(255, 255, 255, 0.01)',
-    border: '1px solid rgba(255, 255, 255, 0.03)',
+    background: 'rgba(0, 0, 0, 0.02)',
+    border: '1px solid rgba(0, 0, 0, 0.05)',
     borderRadius: 'var(--radius-md)',
   },
   subTitle: {

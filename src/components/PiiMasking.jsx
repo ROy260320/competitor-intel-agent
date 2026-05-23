@@ -180,7 +180,7 @@ export default function PiiMasking({ roadmapText, onRoadmapChange, maskedWords, 
 
         {/* Right Side: Masking Demonstration Output */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <div style={{ background: 'rgba(10, 8, 20, 0.8)', border: '1px solid rgba(255, 255, 255, 0.05)', padding: '1.25rem', borderRadius: 'var(--radius-md)', flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ background: 'rgba(255, 255, 255, 0.5)', border: '1px solid rgba(0, 0, 0, 0.08)', padding: '1.25rem', borderRadius: 'var(--radius-md)', flex: 1, display: 'flex', flexDirection: 'column' }}>
             <h3 style={{ fontSize: '0.9rem', fontWeight: '600', marginBottom: '0.75rem', color: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span>📤</span> 发送至大模型的加密遮蔽文本 (Sent to Cloud LLM)
             </h3>
@@ -189,7 +189,7 @@ export default function PiiMasking({ roadmapText, onRoadmapChange, maskedWords, 
               color: 'var(--text-secondary)', 
               lineHeight: '1.6', 
               fontFamily: 'monospace',
-              background: 'rgba(0,0,0,0.2)',
+              background: 'rgba(0, 0, 0, 0.02)',
               padding: '0.75rem',
               borderRadius: 'var(--radius-sm)',
               flex: 1,
@@ -199,7 +199,7 @@ export default function PiiMasking({ roadmapText, onRoadmapChange, maskedWords, 
             </div>
           </div>
 
-          <div style={{ background: 'rgba(10, 8, 20, 0.8)', border: '1px solid rgba(255, 255, 255, 0.05)', padding: '1.25rem', borderRadius: 'var(--radius-md)', flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ background: 'rgba(255, 255, 255, 0.5)', border: '1px solid rgba(0, 0, 0, 0.08)', padding: '1.25rem', borderRadius: 'var(--radius-md)', flex: 1, display: 'flex', flexDirection: 'column' }}>
             <h3 style={{ fontSize: '0.9rem', fontWeight: '600', marginBottom: '0.75rem', color: 'var(--accent-emerald)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span>📥</span> 本地解密还原预览 (Restored locally on Client)
             </h3>
@@ -207,7 +207,7 @@ export default function PiiMasking({ roadmapText, onRoadmapChange, maskedWords, 
               fontSize: '0.85rem', 
               color: 'var(--text-primary)', 
               lineHeight: '1.6', 
-              background: 'rgba(0,0,0,0.2)',
+              background: 'rgba(0, 0, 0, 0.02)',
               padding: '0.75rem',
               borderRadius: 'var(--radius-sm)',
               flex: 1,

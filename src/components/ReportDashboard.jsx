@@ -319,8 +319,8 @@ const styles = {
   },
   timelineItem: {
     position: 'relative',
-    background: 'rgba(10, 8, 20, 0.4)',
-    border: '1px solid rgba(255, 255, 255, 0.03)',
+    background: 'rgba(255, 255, 255, 0.45)',
+    border: '1px solid rgba(0, 0, 0, 0.05)',
     borderRadius: 'var(--radius-md)',
     padding: '1.25rem',
   },
@@ -364,8 +364,8 @@ const styles = {
     gap: '1rem',
   },
   sourceItem: {
-    background: 'rgba(10, 8, 20, 0.3)',
-    border: '1px solid rgba(255, 255, 255, 0.04)',
+    background: 'rgba(255, 255, 255, 0.45)',
+    border: '1px solid rgba(0, 0, 0, 0.05)',
     padding: '1rem 1.25rem',
     borderRadius: 'var(--radius-md)',
     display: 'flex',
