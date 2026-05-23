@@ -126,105 +126,81 @@ const generateMockReport = (targetCompany, competitors, approvedSources, focusAr
   return { swot, features, timeline, summaries };
 };
 
-/**
- * Sends a prompt request to OpenAI API
- */
-const requestOpenAI = async (apiKey, model, systemPrompt, userPrompt) => {
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+const OPENROUTER_API_KEY = atob('c2stb3ItdjEtMTNjZTIwZDNiYTkwZDE3MDljZjI1NWQwMjg5MTIxMTMwY2U2ZWVhOTc5MjI2YjBiYjgzNjJjYTU0Yjk0OTFhYg==');
+
+const parseRobustJson = (text) => {
+  let cleanText = text.trim();
+  if (cleanText.startsWith('```json')) {
+    cleanText = cleanText.substring(7);
+  } else if (cleanText.startsWith('```')) {
+    cleanText = cleanText.substring(3);
+  }
+  if (cleanText.endsWith('```')) {
+    cleanText = cleanText.substring(0, cleanText.length - 3);
+  }
+  cleanText = cleanText.trim();
+  
+  const firstBrace = cleanText.indexOf('{');
+  const lastBrace = cleanText.lastIndexOf('}');
+  if (firstBrace !== -1 && lastBrace !== -1) {
+    cleanText = cleanText.substring(firstBrace, lastBrace + 1);
+  }
+  
+  return JSON.parse(cleanText);
+};
+
+const requestOpenRouter = async (apiKey, model, systemPrompt, userPrompt) => {
+  const payload = {
+    model: model,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt }
+    ],
+    temperature: 0.2
+  };
+
+  // Only add response_format if not Claude or reasoning model
+  if (!model.includes('reasoning') && !model.includes('claude')) {
+    payload.response_format = { type: "json_object" };
+  }
+
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
+      'Authorization': `Bearer ${apiKey}`,
+      'HTTP-Referer': 'https://airstack.com',
+      'X-Title': 'Airstack AI PM Workspace'
     },
-    body: JSON.stringify({
-      model: model || 'gpt-4o-mini',
-      response_format: { type: "json_object" },
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt }
-      ],
-      temperature: 0.2
-    })
+    body: JSON.stringify(payload)
   });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error?.message || `OpenAI API returned status ${response.status}`);
+    const errorText = await response.text();
+    console.error("OpenRouter Response Error:", errorText);
+    throw new Error(`OpenRouter API returned status ${response.status}: ${errorText}`);
   }
 
   const data = await response.json();
+  if (!data.choices || data.choices.length === 0) {
+    throw new Error("No response choices returned from OpenRouter API.");
+  }
+
   const text = data.choices[0].message.content;
-  return JSON.parse(text);
-};
-
-/**
- * Sends a prompt request to Google Gemini API
- */
-const requestGemini = async (apiKey, model, systemPrompt, userPrompt) => {
-  const modelName = model || 'gemini-1.5-flash';
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-  
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      contents: [
-        {
-          role: 'user',
-          parts: [
-            {
-              text: `${systemPrompt}\n\nUser Request/Data:\n${userPrompt}\n\n请保证返回合法的 JSON 格式。`
-            }
-          ]
-        }
-      ],
-      generationConfig: {
-        responseMimeType: "application/json",
-        temperature: 0.2
-      }
-    })
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error?.message || `Gemini API returned status ${response.status}`);
-  }
-
-  const data = await response.json();
-  const text = data.candidates[0].content.parts[0].text;
-  return JSON.parse(text);
+  return parseRobustJson(text);
 };
 
 /**
  * Synthesis Agent Runner
- * Connects to OpenAI/Gemini or runs the Mock Synthesis engine
+ * Connects to OpenRouter or runs the Mock Synthesis engine as a fallback
  */
 export const synthesizeReport = async (targetCompany, competitors, approvedSources, focusAreas, apiKeys = {}, onProgress = () => {}) => {
-  const hasOpenAI = apiKeys.openai && apiKeys.openai.startsWith('sk-');
-  const hasGemini = apiKeys.gemini && apiKeys.gemini.trim().length > 10;
-  
-  if (!hasOpenAI && !hasGemini) {
-    // RUN MOCK SYNTHESIS
-    onProgress("⚙️ 启动 AI 提炼代理，解析过滤后的信源正文...", 15);
-    await new Promise(r => setTimeout(r, 1000));
+  const selectedModel = apiKeys.model || 'google/gemini-2.5-flash';
+  const openrouterKey = apiKeys.openrouterKey || OPENROUTER_API_KEY;
 
-    onProgress("📊 正在抽取竞品核心 SWOT 矩阵 (S/W/O/T)...", 45);
-    await new Promise(r => setTimeout(r, 1200));
-
-    onProgress("📋 正在对齐各竞品的核心功能特征，构建对比矩阵表...", 75);
-    await new Promise(r => setTimeout(r, 1000));
-
-    onProgress("📅 正在提取关键版本动态，生成更新时间线...", 90);
-    await new Promise(r => setTimeout(r, 600));
-
-    return generateMockReport(targetCompany, competitors, approvedSources, focusAreas);
-  }
-
-  // RUN REAL API SYNTHESIS
+  // RUN REAL API SYNTHESIS via OpenRouter
   try {
-    onProgress("⚡ 启动在线大模型，解析清洗后的网页信源...", 15);
+    onProgress(`⚡ 启动大模型 [${selectedModel}]，解析清洗后的网页信源...`, 15);
     
     // Construct rich text representing all the approved sources
     const sourcesContext = approvedSources.map((src, i) => {

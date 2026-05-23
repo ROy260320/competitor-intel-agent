@@ -48,6 +48,7 @@ export default function App() {
     { raw: '1500万', masked: '[Revenue_Target_C]' }
   ]);
   const [customTaxonomy, setCustomTaxonomy] = useState([]);
+  const [selectedModel, setSelectedModel] = useState('google/gemini-2.5-flash');
 
 
 
@@ -133,7 +134,7 @@ export default function App() {
     setApprovedSources(selectedSources);
     
     // Deduct credits for report synthesis
-    handleDeductCredits(28.2, 'Radar Agent: SWOT与功能对比分析生成');
+    handleDeductCredits(28.2, `Radar Agent: SWOT与功能对比分析生成 (${selectedModel})`);
 
     // Reset process values
     setLogs([]);
@@ -154,7 +155,7 @@ export default function App() {
         competitors,
         selectedSources,
         focusAreas,
-        apiKeys,
+        { model: selectedModel },
         progressCallback
       );
       
@@ -192,10 +193,39 @@ export default function App() {
           </p>
         </div>
 
-        <div className="header-meta">
+        <div className="header-meta" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: '600' }}>🤖 AI 智能模型:</span>
+            <select
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value)}
+              className="form-input"
+              style={{
+                padding: '0.4rem 2rem 0.4rem 0.75rem',
+                fontSize: '0.85rem',
+                borderRadius: '10px',
+                width: '210px',
+                background: 'rgba(255, 255, 255, 0.75)',
+                border: '1px solid rgba(0, 0, 0, 0.08)',
+                cursor: 'pointer',
+                fontFamily: 'var(--font-sans)',
+                fontWeight: '500'
+              }}
+            >
+              <option value="google/gemini-2.5-flash">Gemini 2.5 Flash (推荐)</option>
+              <option value="deepseek/deepseek-chat">DeepSeek V3 (分析首选)</option>
+              <option value="deepseek/deepseek-reasoning">DeepSeek R1 (深度思考)</option>
+              <option value="anthropic/claude-3.5-sonnet">Claude 3.5 Sonnet</option>
+              <option value="openai/gpt-4o-mini">GPT-4o Mini (极速)</option>
+              <option value="openai/gpt-4o">GPT-4o (精算推理)</option>
+              <option value="meta-llama/llama-3.3-70b-instruct">LLaMA 3.3 70B</option>
+              <option value="qwen/qwen-2.5-72b-instruct">Qwen 2.5 72B</option>
+            </select>
+          </div>
+
           <span className="badge badge-emerald">
             <Cpu size={12} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
-            Airstack 智能云引擎已就绪
+            Airstack 云端就绪
           </span>
         </div>
       </header>
