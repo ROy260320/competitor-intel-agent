@@ -274,54 +274,12 @@ export default function App() {
         {activeTab === 'radar' && (
           <>
             {step === 'setup' && (
-              <div className="grid-main">
-                {/* Left: Input Setup */}
+              <div style={{ maxWidth: '580px', margin: '2rem auto 0' }}>
                 <SetupPanel
                   onStart={handleStartSearch}
                   onOpenSettings={() => setIsSettingsOpen(true)}
                   isMockMode={isMockMode}
                 />
-
-                {/* Right: Informational UI Panel for AI PM showcase */}
-                <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                  <div className="badge badge-cyan" style={{ width: 'fit-content' }}>💡 Airstack 企业升级演示指南</div>
-                  
-                  <h3 style={{ fontSize: '1.25rem', fontFamily: 'var(--font-display)' }}>
-                    如何向面试官展示本系统？
-                  </h3>
-                  
-                  <div style={styles.introSteps}>
-                    <div style={styles.introStepItem}>
-                      <div style={styles.stepNum}>1</div>
-                      <div>
-                        <strong>定义并融合对比基准 (Benchmark)</strong><br />
-                        <span style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
-                          切换至【基准图谱融合】选项卡，您可以融合 AI 抓取的大纲与自定义标准指标，自动拼凑出产品对比基准图谱。
-                        </span>
-                      </div>
-                    </div>
-
-                    <div style={styles.introStepItem}>
-                      <div style={styles.stepNum}>2</div>
-                      <div>
-                        <strong>测试 Roadmap 敏感词脱敏 (PII)</strong><br />
-                        <span style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
-                          进入【数据安全脱敏】录入敏感产品规划，体验本地替换为占位符并在本地安全还原的安全防护机制。
-                        </span>
-                      </div>
-                    </div>
-
-                    <div style={styles.introStepItem}>
-                      <div style={styles.stepNum}>3</div>
-                      <div>
-                        <strong>体验飞书双向协同闭环 (Lark Bot)</strong><br />
-                        <span style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
-                          前往【飞书智能助理】接收日报推送，进行双向对话并执行“一键生成飞书文档”或“对比 Roadmap”。
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             )}
 
@@ -414,31 +372,3 @@ export default function App() {
   );
 }
 
-const styles = {
-  introSteps: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1.25rem',
-    marginTop: '0.5rem',
-  },
-  introStepItem: {
-    display: 'flex',
-    gap: '1rem',
-    alignItems: 'flex-start',
-  },
-  stepNum: {
-    width: '28px',
-    height: '28px',
-    borderRadius: '50%',
-    backgroundColor: 'rgba(147, 51, 234, 0.1)',
-    border: '1.5px solid var(--primary)',
-    color: 'var(--primary-hover)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontWeight: '700',
-    fontSize: '0.85rem',
-    flexShrink: 0,
-    marginTop: '2px',
-  }
-};
