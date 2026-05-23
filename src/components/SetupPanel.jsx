@@ -66,16 +66,16 @@ export default function SetupPanel({ onStart, onOpenSettings, isMockMode }) {
         <div style={styles.bannerMock}>
           <AlertCircle size={16} style={{ color: 'var(--accent-cyan)', flexShrink: 0 }} />
           <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-            <strong>当前运行：演示/仿真模式</strong><br />
-            将通过高逼真 Mock 引擎模拟搜索和提炼。输入 API 密钥可解锁真实检索。
+            <strong>当前运行：离线沙盒模式</strong><br />
+            当前未配置 API 密钥，已自动启用本地仿真引擎进行模拟检索与分析。配置密钥可解锁实时联网分析。
           </div>
         </div>
       ) : (
         <div style={styles.bannerLive}>
           <Cpu size={16} style={{ color: 'var(--accent-emerald)', flexShrink: 0 }} />
           <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-            <strong>当前运行：实时在线模式</strong><br />
-            Agent 将调用 Tavily 实时抓取并调用大模型进行提炼。
+            <strong>当前运行：实时联网模式</strong><br />
+            已配置 API 密钥，系统将通过 Tavily 实时抓取数据并调用大模型进行提炼。
           </div>
         </div>
       )}

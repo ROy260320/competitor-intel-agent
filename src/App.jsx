@@ -222,7 +222,7 @@ export default function App() {
         <div className="header-meta">
           <span className={`badge ${isMockMode ? 'badge-purple' : 'badge-emerald'}`}>
             <Cpu size={12} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
-            {isMockMode ? 'MOCK 演示模式' : 'LIVE 在线模式'}
+            {isMockMode ? '离线沙盒模式' : 'LIVE 联网模式'}
           </span>
           
           <button
